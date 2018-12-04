@@ -4,10 +4,8 @@ def main(data):
     freq = 0;
     hist = {}
     hist[freq] = True
-    loops = 0
 
     while True:
-        loops +=1
         for i in data:
             freq += i
             if freq in hist:
