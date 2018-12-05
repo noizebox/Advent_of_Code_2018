@@ -10,21 +10,21 @@
 
 int main()
 {
-	int freq = 0;
-	std::unordered_map<int, int> hist;
-	hist[freq] = 1;
-	while (true)
-	{
-		for (auto i: DATA)
-		{
-			freq += i;
-			if (hist.find(freq) != hist.end())
-			{
-				std::cout << "Freq " << freq << " appears twice" << std::endl;
-				return 0;
-			}
-			hist[freq] = 1;
-		}
-	}
-	return -1;
+    int freq = 0;
+    std::unordered_map<int, int> hist;
+    hist[freq] = 1;
+    while (true)
+    {
+        for (auto i: DATA)
+        {
+            freq += i;
+            if (hist.find(freq) != hist.end())
+            {
+                std::cout << "Freq " << freq << " appears twice" << std::endl;
+                return 0;
+            }
+            hist[freq] = 1;
+        }
+    }
+    return -1;
 }

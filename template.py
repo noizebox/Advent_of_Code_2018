@@ -1,8 +1,8 @@
 from day1_data import DATA as DATA
 
 def main(data):
-	print ("Done")
+    print ("Done")
 
 
 if __name__ == "__main__":
-	main(DATA) 
+    main(DATA) 
