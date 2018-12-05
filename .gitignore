@@ -1,0 +1,10 @@
+*.o
+*.a
+*.la
+*.lo
+*.so
+*.so.*
+.*
+!*/.gitkeep
+!.gitignore
+*.pyc
