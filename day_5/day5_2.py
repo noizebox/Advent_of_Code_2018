@@ -1,29 +1,25 @@
+from string import ascii_lowercase
 from day5_data import DATA as DATA
-
-alpha = [c for c in "abcdefghijklmnopqrstuvwxyz"]
-
-def remove_char(data, char):
-    return [c for c in data if c.upper() != char.upper()]
 
 def bruteforce_removed(data):
     r = []
-    for rem in alpha:
-        print "Trying with removing: " + rem
-        d = remove_char(data, rem)
+    for c_remove in ascii_lowercase:
+        print "Trying with removing: " + c_remove
+        d = [c for c in data if c.upper() != c_remove.upper()]
         r.append(len(reduce(d)))
     return r
 
-
 def reduce(data):
-    i = 1
-    while i < len(data):
-        if data[i] != data[i-1] and data[i].upper() == data[i-1].upper():
-            data.pop(i-1)
-            data.pop(i-1)
-            i = 1
+    changed = True
+    while changed:
+        changed = False;
+        for i in range(1, len(data)):
+            if data[i] != data[i-1] and data[i].upper() == data[i-1].upper():
+                data[i] = "-"
+                data[i-1] = "-"
+                changed = True
 
-        else:
-            i += 1
+        data = [i for i in data if i != "-"]
 
     return data
 
