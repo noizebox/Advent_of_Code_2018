@@ -54,8 +54,8 @@ def main():
     x_max, y_max = max_size(c.values())
     # Use a canvas that starts with 0,0 for simpler indexing even if x_max or y_max > 0
     canvas = []
-    for unused in range(0,y_max):
-        canvas.append([0 for unused in range(0,x_max)])
+    for unused in range(0, y_max):
+        canvas.append([0 for unused in range(0, x_max)])
 
     canvas = fill_canvas(c.values(), canvas)
 

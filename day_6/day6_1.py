@@ -20,7 +20,6 @@ def calc_min_distances(point, points):
 
     return mins[1]
 
-
 def solve(data):
     x_min = min([i["coord"][0] for i in data])
     x_max = max([i["coord"][0] for i in data])
@@ -41,7 +40,6 @@ def solve(data):
         areas[point["id"]] = canvas.count(point["id"])
 
     print "Largest area size: " + str(max(areas.items(), key=lambda d: d[1])[0])
-
 
 def main():
     data = load_data('day6_data.txt')
