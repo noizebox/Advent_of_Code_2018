@@ -4,10 +4,8 @@ GENERATIONS = 20
 PADDING = 12
 
 def parse_rule(rule_str, res_str):
-    rule = {}
-    rule["condition"] = [True if c == "#" else False for c in rule_str]
-    rule["result"] = True if res_str == "#" else False
-    return rule
+    return {"condition" : [True if c == "#" else False for c in rule_str],
+            "result" : True if res_str == "#" else False}
  
 def load_data(filename):
     rules = []
@@ -21,25 +19,15 @@ def load_data(filename):
 
     return state, rules
 
-def match_rule(rule, pot, data):
-    match = True
-    for i,p in enumerate(range(pot-2, pot+3)):
-        if data[p] != rule["condition"][i]:
-            match = False
-
-    return match
+def match_rule(rule, data):
+    return rule["result"] if data == rule["condition"] else False
 
 def print_line(l):
     l = ["#" if p else "." for p in l]
     print "".join(l)
 
 def sum_plants(data):
-    s = 0
-    for i,p in enumerate(data):
-        if p:
-            s += i - PADDING 
-    return s
-
+    return sum([i-PADDING for i,p in enumerate(data) if p])
 
 def solve(pots, rules):
     print_line(pots)
@@ -50,17 +38,15 @@ def solve(pots, rules):
         for p in range(2, len(last_gen) - 2):
             cur_pot = False
             for r in rules:
-                if match_rule(r, p, last_gen):
-                    cur_pot = r["result"]
+                if match_rule(r, last_gen[p-2:p+3]):
+                    cur_pot = True
                     break
             cur_gen.append(cur_pot)
         cur_gen.extend([False]*2)
         states.append(cur_gen)
         print_line(cur_gen)
 
-    print "Total number of plants: " + str(sum([sum(r) for r in states]))
     print "Sum of pot numbers " + str(sum_plants(states[-1]))
-
 
 def main():
     state, rules = load_data('day12_data.txt')

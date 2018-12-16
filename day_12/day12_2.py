@@ -5,10 +5,8 @@ PADDING = 300
 TARGET_GENS = 50000000000
 
 def parse_rule(rule_str, res_str):
-    rule = {}
-    rule["condition"] = [True if c == "#" else False for c in rule_str]
-    rule["result"] = True if res_str == "#" else False
-    return rule
+    return {"condition" : [True if c == "#" else False for c in rule_str],
+            "result" : True if res_str == "#" else False}
  
 def load_data(filename):
     rules = []
@@ -22,32 +20,23 @@ def load_data(filename):
 
     return state, rules
 
-def match_rule(rule, pot, data):
-    match = True
-    for i,p in enumerate(range(pot-2, pot+3)):
-        if data[p] != rule["condition"][i]:
-            match = False
-
-    return match
+def match_rule(rule, data):
+    return rule["result"] if data == rule["condition"] else False
 
 def sum_plants(data):
-    s = 0
-    for i,p in enumerate(data):
-        if p:
-            s += i - PADDING 
-    return s
+    return sum([i-PADDING for i,p in enumerate(data) if p])
 
 def solve(pots, rules):
     sums = [sum_plants(pots)]
     diffs = [sums[0]]
     last_gen = pots
-    for g in range(0, GENERATIONS):
+    for g in range(1, GENERATIONS):
         cur_gen = [False] * 2
         for p in range(2, len(last_gen) - 2):
             cur_pot = False
             for r in rules:
-                if match_rule(r, p, last_gen):
-                    cur_pot = r["result"]
+               if match_rule(r, last_gen[p-2:p+3]):
+                    cur_pot = True
                     break
             cur_gen.append(cur_pot)
         cur_gen.extend([False]*2)
@@ -56,8 +45,9 @@ def solve(pots, rules):
         diffs.append(sums[-1] - sums[-2])
 
         if diffs[-1] == diffs[-2]:
-            # Steady state achieved, now just extrapolate from here
-            print "Sum at 50 bilj generations " + str(sums[-1] + diffs[-1] * (TARGET_GENS - g -1))
+            # We've reached a steady state, where the sum increases by a constant amount per 
+            # generation, Now just extrapolate to 50 billion generations from here
+            print "Sum at 50 billion generations " + str(sums[-1] + diffs[-1] * (TARGET_GENS - g))
             break
 
 
