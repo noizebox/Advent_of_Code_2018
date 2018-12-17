@@ -7,12 +7,6 @@ RIGHT = 1
 DOWN = 2
 LEFT = 3
 
-def dir_to_enum(dir):
-    return DIRECTIONS.index(dir)
-
-def cart_compare(cart):
-    return cart.pos[0] + cart.pos[1]*500
-
 class Cart(object):
     def __init__(self, position, direction, track, id):
         self.pos = position
@@ -29,23 +23,21 @@ class Cart(object):
         self.dir = (self.dir - 1) % 4
 
     def tick(self):
-        if self.dir == UP: self.pos[1] -=1
+        if self.dir   == UP: self.pos[1] -=1
         elif self.dir == RIGHT: self.pos[0] +=1
         elif self.dir == DOWN: self.pos[1] +=1
         elif self.dir == LEFT: self.pos[0] -=1
 
         road = self.track[self.pos[1]][self.pos[0]]
 
-        if road == "\\" and self.dir in [UP, DOWN]: self.turn_left()
+        if road   == "\\" and self.dir in [UP, DOWN]: self.turn_left()
         elif road == "\\" and self.dir in [LEFT, RIGHT]: self.turn_right()
-        elif road == "/" and self.dir in [UP, DOWN]: self.turn_right()
-        elif road == "/" and self.dir in [LEFT, RIGHT]: self.turn_left()
+        elif road == "/"  and self.dir in [UP, DOWN]: self.turn_right()
+        elif road == "/"  and self.dir in [LEFT, RIGHT]: self.turn_left()
 
         elif road == "+":
             self.dir = (self.dir + self.turn) % 4
-            self.turn += 1
-            if self.turn > 1:
-                self.turn = -1
+            self.turn = self.turn + 1 if self.turn < 1 else -1 
 
         return self.pos
 
@@ -57,6 +49,9 @@ def load_data(filename):
 
     return data        
 
+def cart_compare(cart):
+    return cart.pos[0] + cart.pos[1]*500
+    
 def create_carts(track):
     carts = []
     for y,row in enumerate(track):
@@ -80,9 +75,9 @@ def solve(track, carts):
                 print "Collision at " + str(pos)
                 return 
 
-            positions[cart.id]= pos
+            positions[cart.id] = pos
 
-def solve_remove(track, carts):
+def solve_crashes(track, carts):
     positions = {c.id : c.pos for c in carts}
     while len(positions) > 1:
         carts.sort(key=cart_compare);
@@ -108,6 +103,6 @@ def main():
     # We need to reload the track data to restart with the original cart positions
     track = load_data('day13_data.txt')
     carts = create_carts(track)
-    solve_remove(track, carts)
+    solve_crashes(track, carts)
 
 if __name__ == "__main__": main()
